@@ -88,8 +88,8 @@ def create_figure_2():
     return fig
 
 
-'''
-@app.route('/plots/air_humi.png')
+
+@app.route('/plots/water_temp.png')
 def plot_png_3():
     fig = create_figure_3()
     output = io.BytesIO()
@@ -106,16 +106,16 @@ def create_figure_3():
     #xs = range()
     
     xs = data["date"]
-    ys = data["humi"]
+    ys = data["water_temp"]
     #print(ys)
     plt.xlabel('Time')
-    plt.ylabel('rel. Humidity in %')
+    plt.ylabel('Water Temperature [C°]')
     axis.plot(xs, ys)
     return fig
 
 
 
-@app.route('/plots/air_humi.png')
+@app.route('/plots/water_ph.png')
 def plot_png_4():
     fig = create_figure_4()
     output = io.BytesIO()
@@ -132,23 +132,23 @@ def create_figure_4():
     #xs = range()
     
     xs = data["date"]
-    ys = data["humi"]
+    ys = data["water_ph"]
     #print(ys)
     plt.xlabel('Time')
-    plt.ylabel('rel. Humidity in %')
+    plt.ylabel('ph')
     axis.plot(xs, ys)
     return fig
 
 
 
-  '''
+  
 
 
 
 @app.route('/aktualisierungstest') #todo rm
 def akt():
     #return '<img src="plot.png" id="myImage" />'
-    return render_template('reload_frame.html', picture_path = "plots/air_pres.png")
+    return render_template('reload_frame.html', picture_path = "plots/air_humi.png")
 
 
 
