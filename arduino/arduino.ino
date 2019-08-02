@@ -4,9 +4,9 @@
 #include "xdkconnection.h"
 
 // GPS
-TinyGPSPlus gps;
 #define gpsSerial Serial1
 #define PMTK_SET_NMEA_UPDATE_1HZ  "$PMTK220,1000*1F"
+TinyGPSPlus gps;
 
 // Temperature
 #define TEMP_SENSOR_PIN 0
@@ -17,11 +17,14 @@ void setup() {
   gpsSerial.begin(9600);
   gpsSerial.println(F(PMTK_SET_NMEA_UPDATE_1HZ));
   tempSensor.begin();
+  delay(5000);
 }
 
 void updateSensors() {
   while (gpsSerial.available() > 0)
+  {
     gps.encode(gpsSerial.read());
+  }
     
   tempSensor.requestTemperatures();
 }

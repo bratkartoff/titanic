@@ -68,6 +68,6 @@ uint64_t doubleToMessageVal(double val) {
 }
 
 void sendMessage(size_t start, size_t n) {
-	for (size_t i = 0; i < n; n++)
+	for (size_t i = 0; i < n; i++)
 		send(messageContainer[start + i]);
 }
