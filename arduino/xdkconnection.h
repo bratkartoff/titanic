@@ -3,7 +3,7 @@
 
 #define MESSAGE_LENGTH 3
 #define PRECISION 65536 // 2 ** 16
-#define DELAY 20
+#define DELAY 50
 
 #define XDK_OUTPUT_PIN 7
 #define XDK_CLOCK_PIN 8
@@ -24,12 +24,7 @@ struct SensorData messageContainer[MESSAGE_LENGTH] = {{0, LATITUDE}, {0, LONGTIT
 /*
  * Message format:
  * HIGH on clock pin (end) -> start message
- * sensor identifier (SENSOR_ID_LENGTH, lower bits first)
- * number (DATA_LENGTH bits, lower bits first)
  * Message format:
- * PREFIX_LENGTH / 4 HIGH
- * PREFIX_LENGTH / 2 LOW
- * PREFIX_LENGTH / 4 HIGH
  * sensor identifier (SENSOR_ID_LENGTH, lower bits first)
  * number (DATA_LENGTH bits, lower bits first)
  */
@@ -39,13 +34,8 @@ void sendBit(bool b) {
   delay(DELAY);
 }
 
-void sendBits(bool b, int n) {
-  digitalWrite(XDK_OUTPUT_PIN, b);
-  delay(DELAY * n);
-}
-
-void sendData(uint64_t val) {
-  for (int i = 0; i < DATA_LENGTH; i++) {
+void sendData(uint64_t val, int n) {
+  for (int i = 0; i < n; i++) {
     sendBit(val % 2);
     val /= 2;
   }
@@ -59,8 +49,8 @@ void startMessage() {
 
 void send(struct SensorData data) {
 	startMessage();
-	sendData(data.id);
-	sendData(data.val);
+	sendData(data.id, SENSOR_ID_LENGTH);
+	sendData(data.val, DATA_LENGTH);
 }
 
 uint64_t doubleToMessageVal(double val) {
