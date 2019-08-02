@@ -1,7 +1,7 @@
 #define SENSOR_ID_LENGTH 3
 #define DATA_LENGTH 25
 
-#define MESSAGE_LENGTH 3
+#define MESSAGE_LENGTH 4
 #define PRECISION 65536 // 2 ** 16
 #define DELAY 50
 
@@ -11,7 +11,8 @@
 enum SensorId {
   LATITUDE = 2,
   LONGTITUDE = 3,
-  TEMPERATURE = 4
+  TEMPERATURE = 4,
+  PH = 5
 };
 
 struct SensorData {
@@ -19,7 +20,7 @@ struct SensorData {
   enum SensorId id;
 };
 
-struct SensorData messageContainer[MESSAGE_LENGTH] = {{0, LATITUDE}, {0, LONGTITUDE}, {0, TEMPERATURE}};
+struct SensorData messageContainer[MESSAGE_LENGTH] = {{0, LATITUDE}, {0, LONGTITUDE}, {0, TEMPERATURE}, {0, PH}};
 
 /*
  * Message format:

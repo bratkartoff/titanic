@@ -13,9 +13,13 @@ TinyGPSPlus gps;
 OneWire oneWire(TEMP_SENSOR_PIN);
 DallasTemperature tempSensor(&oneWire);
 
+//Ph
+double currentPhOffset;
+
 void setup() {
   pinMode(7, OUTPUT);
-  pinMode(6, INPUT);
+  pinMode(8, OUTPUT);
+  currentPhOffset = 0;
   gpsSerial.begin(9600);
   gpsSerial.println(F(PMTK_SET_NMEA_UPDATE_1HZ));
   tempSensor.begin();
@@ -27,7 +31,7 @@ void updateSensors() {
   {
     gps.encode(gpsSerial.read());
   }
-    
+      Serial.print(digitalRead(6));
   tempSensor.requestTemperatures();
 }
 
@@ -42,10 +46,16 @@ void transmitData() {
     Serial.print(" "); */
     sendMessage(0, 2);
   }
- /* Serial.print("Temp: ");
-  Serial.println(tempSensor.getTempCByIndex(0) - 3); */
+  Serial.print("Temp: ");
+  Serial.println(tempSensor.getTempCByIndex(0) - 3);
   messageContainer[2].val = doubleToMessageVal(tempSensor.getTempCByIndex(0) - 3);
-  sendMessage(2, 1);
+  messageContainer[3].val = doubleToMessageVal(7) + currentPhOffset;
+  currentPhOffset += random(300) / 1000.0;
+  if (currentPhOffset > 0.5)
+    currentPhOffset = 0.5;
+  if (currentPhOffset < -0.5)
+    currentPhOffset = -0.5;
+  sendMessage(2, 2);
 }
 
 void loop() {
