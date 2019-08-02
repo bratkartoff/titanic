@@ -14,12 +14,17 @@ def on_subscribe(client, userdata, mid, granted_qos):
     print("Subscribed: "+str(mid)+" "+str(granted_qos))
 
 def on_message(client, userdata, msg):
+    
     msg.payload = msg.payload.decode("utf-8")
+
+    print("message received " , msg.payload)
+    print("message topic=",msg.topic)
+
     values = (msg.payload).split(',')
     s = pd.Series(values, index = ["humi", "pres", "temp"])
     s["date"] = time.time()
 
-    newdata = pd.DataFrame({"humi": s["humi"], "pres": s["pres"], "temp": s["temp"], "date": s["date"]}, index=[0])
+    newdata = pd.DataFrame({"air_humi": s["humi"], "air_pres": s["pres"], "air_temp": s["temp"], "date": s["date"]}, index=[0])
     newdata.set_index("date", inplace=True)
 
 
@@ -30,7 +35,7 @@ def on_message(client, userdata, msg):
         data.set_index("date", inplace=True)
         data = pd.concat([data,newdata], sort = False)
  
-    except Exception as e:
+    except Exception:
         data = newdata
 
     data.to_csv("data.csv")

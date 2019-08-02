@@ -1,0 +1,10 @@
+<img src="{{picture_path}}" id="myImage" />
+<script>
+    var myImageElement = document.getElementById('myImage');
+    myImageElement.src = '{{picture_path}}?' + Math.random();
+
+    setInterval(function() {
+        var myImageElement = document.getElementById('myImage');
+        myImageElement.src = '{{picture_path}}?' + Math.random();
+    }, 2500);
+</script>
